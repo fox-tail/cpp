@@ -1,29 +1,15 @@
-#include <iostream>
 #include "queue.h"
 
 using namespace std;
 
-class Queue
+Queue::Queue()
 {
-    private:
-        int Size;
-        int Capacity;
-		QUEUENODE *Head;
-		QUEUENODE *Tail;
-       
-    public:
-		Queue()
-		{
-    		Size = 0;
-    		Capacity = 1024;
-			Head = NULL;
-			Tail = NULL;
-		}
-		Queue(int Capacity);
-		int GetQueueSize();
-		int GetQueueCapacity();
-};
-
+	Size = 0;
+	Capacity = 1024;
+	Head = NULL;
+	Tail = NULL;
+}
+	
 Queue::Queue(int Capacity)
 {
 	this->Capacity = Capacity;
@@ -42,20 +28,49 @@ int Queue::GetQueueCapacity()
 	return Capacity;
 }
 
-int Queue::Enqueue(QUEUENODE node)
+int Queue::Enqueue(QUEUENODE Node)
 {
+	QUEUENODE *Obj = new QUEUENODE;
+	if(!Obj) return -1;
+	
+	*Obj = Node;
+	Obj->Next = NULL;
+ 
+	if((!Head)||(!Tail)){
+		Head = Obj;
+		Tail = Obj;
+		return 0;	
+	}
+	
+	Tail->Next = Obj;
+	Tail = Obj;
 	return 0;
 }
 
-int Queue::Dequeue(QUEUENODE *node)
+QUEUENODE *Queue::Dequeue()
 {
-	return 0;
+	if((!Head)||(!Tail)) return NULL;
+ 
+	QUEUENODE *ptr = Head;
+	Head = Head->Next;
+	if(!Head){
+		Tail = Head;
+	}
+	return ptr;
 }
 
-int main(int args, char *argv[])
+void Queue::TraversalQueue()
 {
-	Queue Q(100);
-	cout<<Q.GetQueueSize()<<endl;
-	cout<<Q.GetQueueCapacity()<<endl;
-	return 0;
+	if((!Head)||(!Tail)){
+		cout<<"Queue Not Exist"<<endl;
+		return;
+	}
+
+	QUEUENODE *ptr = Head;
+	int i = 0;
+	while(ptr){
+		cout<<"["<<i<<"]:"<<ptr->Text<<endl;
+		ptr = ptr->Next;
+		i++;
+	}
 }
